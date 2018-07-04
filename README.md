@@ -1,5 +1,5 @@
 # Basic_Watch
-A basic Arduino firmware for the Watchx
+A basic Arduino firmware for the WatchX
 
 The eventual aim is to have a basic firmware that has. 
 - Decent battery life.
