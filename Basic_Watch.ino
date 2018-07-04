@@ -134,7 +134,7 @@ void setup()   {
   Watchface();
 }
 
-
+// The main loop Primarily used to monitor button presses and exceute actions.
 void loop() {
   DateTime now = rtc.now();
 
@@ -184,12 +184,7 @@ void loop() {
       MainMenu();
       delay(debounce);
     }
-    else if (WatchState == 1 && Menu == 1) {
-      wake();
-      ExecuteAction(MenuOption);
-      delay(debounce);
-    }
-    else if (WatchState == 1 && Menu == 2) {
+    else if (WatchState == 1 && Menu > 0) {
       wake();
       ExecuteAction(MenuOption);
       delay(debounce);
@@ -201,10 +196,10 @@ void loop() {
 
       Watchface();
     }
-    if (Menu == 1) {
+    else if (Menu == 1) {
       MainMenu();
     }
-    if (Menu == 3) {
+    else if (Menu == 3) {
       SetTimeMenu();
     }
   }
@@ -217,7 +212,7 @@ void loop() {
     if (Menu == 1) {
       MainMenu();
     }
-    if (Menu == 2) {
+    else if (Menu == 2) {
       SetTimeMenu();
     }
     delay(debounce);
@@ -232,7 +227,7 @@ void loop() {
     if (Menu == 1) {
       MainMenu();
     }
-    if (Menu == 2) {
+    else if (Menu == 2) {
       SetTimeMenu();
     }
     delay(debounce);
@@ -245,7 +240,7 @@ void loop() {
 
 }
 
-
+// This function wakes the screen up
 void wake() {
   display.ssd1306_command(SSD1306_DISPLAYON);
   WatchState = 1;
@@ -255,6 +250,7 @@ void wake() {
 
 }
 
+// This fucntion puts the screen to sleep
 void sleep() {
   //Serial.println("Sleep");
   display.ssd1306_command(SSD1306_DISPLAYOFF);
@@ -262,7 +258,8 @@ void sleep() {
 
 }
 
-
+// This function displays the main watchface
+// Todo seperate non watchface calcs into a seperate function eg. battery calcs
 void Watchface() {
   //Serial.print("Watch face");
   display.clearDisplay();
@@ -317,7 +314,7 @@ void Watchface() {
 
 }
 
-
+// This function displays the main menu
 void MainMenu() {
   //Serial.println("Main Menu");
   Menu = 1;
@@ -356,11 +353,13 @@ void MainMenu() {
   delay(debounce);
 }
 
+// This function is the exit menu option
 void Exit() {
   Watchface();
   Menu = 0;
 }
 
+// Execute a selected menu option
 void ExecuteAction(int option) {
   if (Menu == 1) {
     if (option == 1) {
@@ -380,14 +379,14 @@ void ExecuteAction(int option) {
       }
       SetTimeMenu();
     }
-    if (option == 2) {
+    else if (option == 2) {
       month++;
       if (month > 12) {
         month = 1;
       }
       SetTimeMenu();
     }
-    if (option == 3) {
+    else if (option == 3) {
       day++;
       // this needs to be smarter as some months have less days
       if (day > 31) {
@@ -395,26 +394,26 @@ void ExecuteAction(int option) {
       }
       SetTimeMenu();
     }
-    if (option == 4) {
+    else if (option == 4) {
       hour++;
       if (hour > 23) {
         hour = 0;
       }
       SetTimeMenu();
     }
-    if (option == 5) {
+    else if (option == 5) {
       minute++;
       if (minute > 59) {
         minute = 0;
       }
       SetTimeMenu();
     }
-    if (option == 6) {
+    else if (option == 6) {
       SetTime();
       MenuOption = 1;
       MainMenu();
     }
-    if (option == 7) {
+    else if (option == 7) {
       MenuOption = 1;
       SetDateTimeVar();
       MainMenu();
@@ -424,6 +423,8 @@ void ExecuteAction(int option) {
 
 
 }
+
+// This function displays the menu for setting the time and date
 void SetTimeMenu() {
   //delay(debounce);
   MaxMenu = 7;
@@ -470,27 +471,27 @@ void SetTimeMenu() {
     display.setCursor(0, 10);
     display.print(">");
   }
-  if (MenuOption == 2) {
+  else if (MenuOption == 2) {
     display.setCursor(0, 18);
     display.print(">");
   }
-  if (MenuOption == 3) {
+  else if (MenuOption == 3) {
     display.setCursor(0, 26);
     display.print(">");
   }
-  if (MenuOption == 4) {
+  else if (MenuOption == 4) {
     display.setCursor(0, 34);
     display.print(">");
   }
-  if (MenuOption == 5) {
+  else if (MenuOption == 5) {
     display.setCursor(0, 42);
     display.print(">");
   }
-  if (MenuOption == 6) {
+  else if (MenuOption == 6) {
     display.setCursor(0, 50);
     display.print(">");
   }
-  if (MenuOption == 7) {
+  else if (MenuOption == 7) {
     display.setCursor(75, 50);
     display.print(">");
   }
@@ -498,12 +499,13 @@ void SetTimeMenu() {
 
 }
 
+// This function actually sets the time
 void SetTime() {
   rtc.adjust(DateTime(year, month, day, hour, minute, 0));
 
 }
 
-
+// This fucntion prepares some variables to display when setting the time
 void SetDateTimeVar() {
   DateTime noW = rtc.now();
   year = noW.year();
