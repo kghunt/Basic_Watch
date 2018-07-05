@@ -1,3 +1,12 @@
+//#include <Adafruit_ATParser.h>
+//#include <Adafruit_BLE.h>
+//#include <Adafruit_BLEBattery.h>
+//#include <Adafruit_BLEEddystone.h>
+//#include <Adafruit_BLEGatt.h>
+//#include <Adafruit_BLEMIDI.h>
+//#include <Adafruit_BluefruitLE_SPI.h>
+//#include <Adafruit_BluefruitLE_UART.h>
+
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
@@ -7,6 +16,7 @@
 //#include "cpu.h"
 
 #include <Adafruit_SleepyDog.h>
+
 
 RTC_DS3231 rtc;
 
@@ -86,25 +96,24 @@ int HourlyTones = 0;
 // Disable button press tones (to be added to a menu soon)
 int KeyPressTones = 0;
 
-void setup()   {
-  //tone(9,1000,200);
+// Bluetooth module pins
+#define BLUEFRUIT_SPI_CS               A2
+#define BLUEFRUIT_SPI_IRQ              0
+#define BLUEFRUIT_SPI_RST              A1    // Optional but recommended, set to -1 if unused
 
+void setup()   {
+  if (KeyPressTones == 1){
+  tone(9,1000,200);
+  }
   //Serial.begin(9600);
 
-
-  // Battery saving stuffs I will work on this later
-  //#define BLUEFRUIT_SPI_CS               A2
-  //#define BLUEFRUIT_SPI_IRQ              0
-  //#define BLUEFRUIT_SPI_RST              A1    // Optional but recommended, set to -1 if unused
-  //Adafruit_BluefruitLE_SPI ble(BLUEFRUIT_SPI_CS, BLUEFRUIT_SPI_IRQ, BLUEFRUIT_SPI_RST);
-  //ble.sendCommandCheckOK(F( "AT+HWMODELED=DISABLE" ));
-  //delay(100); ble.sendCommandCheckOK(F( "AT+UARTFLOW=OFF" ));
-  //delay(100); ble.sendCommandCheckOK(F( "AT+BLEPOWERLEVEL=-12" ));
-  //delay(100); ble.sendCommandCheckOK(F( "AT+BLEMIDIEN=OFF" ));
-  //delay(100); ble.sendCommandCheckOK(F( "AT+GAPSTOPADV" ));
-
-
-
+  // Battery saving stuffs. This should turn off the bluetooth module putting it to sleep.
+//  Adafruit_BluefruitLE_SPI ble(BLUEFRUIT_SPI_CS, BLUEFRUIT_SPI_IRQ, BLUEFRUIT_SPI_RST);
+//  ble.sendCommandCheckOK(F( "AT+HWMODELED=DISABLE" ));
+//  delay(100); ble.sendCommandCheckOK(F( "AT+UARTFLOW=OFF" ));
+//  delay(100); ble.sendCommandCheckOK(F( "AT+BLEPOWERLEVEL=-12" ));
+//  delay(100); ble.sendCommandCheckOK(F( "AT+BLEMIDIEN=OFF" ));
+//  delay(100); ble.sendCommandCheckOK(F( "AT+GAPSTOPADV" ));
 
   rtc.begin();
 
@@ -196,12 +205,13 @@ void loop() {
 
       Watchface();
     }
-    else if (Menu == 1) {
-      MainMenu();
-    }
-    else if (Menu == 3) {
-      SetTimeMenu();
-    }
+    // not needed?
+//    else if (Menu == 1) {
+//      MainMenu();
+//    }
+//    else if (Menu == 2) {
+//      SetTimeMenu();
+//    }
   }
   if (digitalRead(Button2) == 0 && Menu != 0 && MenuOption > MinMenu) {
     if (KeyPressTones == 1) {
@@ -209,11 +219,15 @@ void loop() {
     }
     wake();
     MenuOption --;
+    // not needed?
     if (Menu == 1) {
       MainMenu();
     }
     else if (Menu == 2) {
       SetTimeMenu();
+    }
+    else if (Menu == 3) {
+      TonesMenu();
     }
     delay(debounce);
   }
@@ -230,6 +244,9 @@ void loop() {
     else if (Menu == 2) {
       SetTimeMenu();
     }
+    else if (Menu == 3) {
+      TonesMenu();
+    }
     delay(debounce);
   }
 
@@ -237,6 +254,7 @@ void loop() {
   if (WatchState == 0) {
     Watchdog.sleep(400);
   }
+
 
 }
 
@@ -361,16 +379,23 @@ void Exit() {
 
 // Execute a selected menu option
 void ExecuteAction(int option) {
+
+  // Menu 1 Actions
   if (Menu == 1) {
     if (option == 1) {
       Exit();
     }
-    if (option == 2) {
+    else if (option == 2) {
       MenuOption = 1;
       SetTimeMenu();
     }
+       else if (option == 3) {
+      MenuOption = 1;
+      TonesMenu();
+    }
   }
 
+  // Menu 2 Actions
   if (Menu == 2) {
     if (option == 1) {
       year++;
@@ -420,13 +445,39 @@ void ExecuteAction(int option) {
     }
 
   }
-
+// Menu 3 actions
+  if (Menu == 3){
+    if (option == 1) {
+      MenuOption = 1;
+      MainMenu();
+      
+    }
+    else if (option == 2) {
+      if (KeyPressTones == 0) {
+        KeyPressTones = 1;
+      }
+      else {
+        KeyPressTones = 0;
+      }
+      TonesMenu();
+    }
+    else if (option == 3) {
+      if (HourlyTones == 0) {
+        HourlyTones = 1;
+      }
+      else {
+        HourlyTones = 0;
+      }
+      TonesMenu();
+    }
+    
+  }
 
 }
 
 // This function displays the menu for setting the time and date
 void SetTimeMenu() {
-  //delay(debounce);
+
   MaxMenu = 7;
   MinMenu = 1;
   Menu = 2;
@@ -516,4 +567,61 @@ void SetDateTimeVar() {
   second = noW.second();
 }
 
+// Menu for setting the tones
+void TonesMenu(){
+  MaxMenu = 3;
+  MinMenu = 1;
+  Menu = 3;
+
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setCursor(40, 0);
+  display.print("Tone Settings");
+  display.setCursor(0, 0);
+  display.print("sel");
+  display.setCursor(115, 0);
+  display.print("up");
+  display.setCursor(115, 57);
+  display.print("dn");
+ 
+  display.setCursor(5, 10);
+  display.print("Exit");
+  
+  display.setCursor(5, 18);
+  display.print("Key Tones   :");
+  display.setCursor(85, 18);
+  if (KeyPressTones == 0){
+      display.print("Off");
+  }
+  else{
+    display.print("On");
+  }
+
+  display.setCursor(5, 26);
+  display.print("Hourly Tones:");
+  display.setCursor(85, 26);
+  
+  if (HourlyTones == 0){
+      display.print("Off");
+  }
+  else{
+    display.print("On");
+  }
+
+
+  if (MenuOption == 1) {
+    display.setCursor(0, 10);
+    display.print(">");
+  }
+  else if (MenuOption == 2) {
+    display.setCursor(0, 18);
+    display.print(">");
+  }
+    else if (MenuOption == 3) {
+    display.setCursor(0, 26);
+    display.print(">");
+  }
+
+  display.display();
+}
 
