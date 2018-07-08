@@ -28,3 +28,9 @@ Then the watch will not go to sleep until you uncomment it.
 Battery Life
 Sleep mode disabled: ~7-8 hours.
 Sleep mode enabled:  33 hours and counting.
+
+UPDATES by wbphelps - 07/08/2018
+- general button logic cleanup: make button handling consistent, wakeup on all 3 buttons
+- fix bug where values were being changed when entering time or tones menu.
+- use 10x longer timeout when in menu 
+- shorten keypress tones, use different tones for each button
