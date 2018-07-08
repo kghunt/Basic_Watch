@@ -34,3 +34,4 @@ UPDATES by wbphelps - 07/08/2018
 - fix bug where values were being changed when entering time or tones menu.
 - use 10x longer timeout when in menu 
 - shorten keypress tones, use different tones for each button
+- add reset function: press button1 & button 3 to reset watch
