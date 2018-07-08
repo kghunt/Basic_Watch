@@ -17,6 +17,14 @@
 
 #include <Adafruit_SleepyDog.h>
 
+// Updated 07/08/2018 - wbphelps
+// general button logic cleanup: make button handling consistent, wakeup on all 3 buttons
+// fix bug where values were being changed when entering time or tones menu.
+// use 10x longer timeout when in menu
+// shorten keypress tones, use different tones for each button
+// add reset function: press button1 & button 3 to reset watch
+// Up/Down buttons wrap around, only update if menu active
+
 #define NOTE_B6  1976
 #define NOTE_C7  2093
 #define NOTE_CS7 2217
@@ -219,19 +227,22 @@ void loop() {
         Watchface();
       }
     }
-    else {
+    else if (Menu > 0) {
       if (MenuOption > MinMenu) {
         MenuOption --;
-        // not needed?
-        if (Menu == 1) {
-          MainMenu();
         }
-        else if (Menu == 2) {
-          SetTimeMenu();
-        }
-        else if (Menu == 3) {
-          TonesMenu();
-       }
+      else {
+        MenuOption = MaxMenu;  // Wrap
+      }
+      // not needed?
+      if (Menu == 1) {
+        MainMenu();
+      }
+      else if (Menu == 2) {
+        SetTimeMenu();
+      }
+      else if (Menu == 3) {
+        TonesMenu();
       }
     }
   delay(debounce);
@@ -248,18 +259,21 @@ void loop() {
         Watchface();
       }
     }
-    else {
+    else if (Menu > 0) {
       if (MenuOption < MaxMenu) {
         MenuOption ++;
-        if (Menu == 1) {
-          MainMenu();
-        }
-        else if (Menu == 2) {
-          SetTimeMenu();
-        }
-        else if (Menu == 3) {
-          TonesMenu();
-        }
+      }
+      else {
+        MenuOption = 1;  // wrap around
+      }
+      if (Menu == 1) {
+        MainMenu();
+      }
+      else if (Menu == 2) {
+        SetTimeMenu();
+      }
+      else if (Menu == 3) {
+        TonesMenu();
       }
     }
   delay(debounce);
