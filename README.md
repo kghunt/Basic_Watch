@@ -5,6 +5,7 @@ The eventual aim is to have a basic firmware that has.
 - Decent battery life.
 - A basic text based menu.
 - Bluetooth smart phone notifications.
+- Easy to read modifiable code. Especially for newcomers.
 
 It would also be nice if I can add (as long as battery is not affected too much):
 - Wrist movement wake ups.
@@ -25,9 +26,9 @@ If you are making lots of changes then comment out:
 Watchdog.sleep(400);
 Then the watch will not go to sleep until you uncomment it.
 
-Battery Life
+Battery Life:
 Sleep mode disabled: ~7-8 hours.
-Sleep mode enabled:  33 hours and counting.
+Sleep mode enabled:  33 hours and counting, I broke my screen during testing but I was up at over 50 hours with 40% battery remaining.
 
 UPDATES by wbphelps - 07/08/2018
 - general button logic cleanup: make button handling consistent, wakeup on all 3 buttons
