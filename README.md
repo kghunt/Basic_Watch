@@ -35,3 +35,4 @@ UPDATES by wbphelps - 07/08/2018
 - use 10x longer timeout when in menu 
 - shorten keypress tones, use different tones for each button
 - add reset function: press button1 & button 3 to reset watch
+- Up/Down buttons wrap, don't update unless in Menu
