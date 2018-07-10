@@ -45,6 +45,8 @@ float voltage;
 int percent;
 unsigned long currentMillis;
 unsigned long previousMillis = 0;
+
+// Watch face timeout this is x10 whilst in menus
 const long interval = 5000;
 
 
@@ -53,13 +55,15 @@ int MenuOption = 1;
 
 // Which Menu is currently on the display
 int Menu = 0;
+
+// Menu limit uses to control the cursor
 int MaxMenu;
 int MinMenu;
 
 // Watch state
 // 0 = Screen off
 // 1 = Screen on
-int WatchState = 0;
+boolean WatchState = 0;
 
 // time to limit multiple presses.
 int debounce = 300;
@@ -77,9 +81,10 @@ int minute;
 int second;
 
 // Disable hourly beeps (to be added to a menu soon)
-int HourlyTones = 0;
+boolean HourlyTones = 0;
 // Disable button press tones (to be added to a menu soon)
-int KeyPressTones = 0;
+boolean KeyPressTones = 0;
+
 
 void setup()   {
   //Serial.begin(9600);
@@ -157,7 +162,7 @@ void loop() {
 
   }
 
-
+  // Button 1 pressed
   if (digitalRead(Button1) == 0){
     if (KeyPressTones == 1){
     tone(buzzer,3000,100);
@@ -182,6 +187,7 @@ void loop() {
       delay(debounce);
     }
   }
+  // Button 2 pressed
   if (digitalRead(Button2) == 0 && WatchState == 0){
    wake(); 
   }
@@ -200,6 +206,7 @@ void loop() {
     delay(debounce);
   }
 
+  // Button 3 pressed
   if (digitalRead(Button3) == 0 && Menu != 0 && MenuOption < MaxMenu){
     if (KeyPressTones == 1){
     tone(buzzer,3000,100);
