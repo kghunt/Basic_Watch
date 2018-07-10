@@ -275,17 +275,17 @@ void Watchface(){
   // Show battery percentage
   display.setTextSize(1);
   display.setCursor(1, 54);
-  display.print("Batt:");
+  display.print(F("Batt:"));
   display.print(percent);
-  display.print("%");
+  display.print(F("%"));
   display.display();
 
   // Show date
   display.setCursor(40, 0);
   display.print(now.day(), DEC);
-  display.print("-");
+  display.print(F("-"));
   display.print(now.month(), DEC);
-  display.print("-");
+  display.print(F("-"));
   display.print(now.year(), DEC);
   display.display();
   
@@ -303,30 +303,30 @@ void MainMenu(){
   display.clearDisplay();
   display.setTextSize(1);
   display.setCursor(0, 0);
-  display.print("sel");
+  display.print(F("sel"));
   display.setCursor(40, 0);
-  display.print("Main Menu");
+  display.print(F("Main Menu"));
   display.setCursor(5, 12);
-  display.print("Exit");
+  display.print(F("Exit"));
   display.setCursor(5, 22);
-  display.print("Set Time");
+  display.print(F("Set Time"));
   display.setCursor(5, 32);
-  display.print("Tones");
+  display.print(F("Tones"));
   display.setCursor(115, 0);
-  display.print("up");
+  display.print(F("up"));
   display.setCursor(115, 57);
-  display.print("dn");
+  display.print(F("dn"));
   if (MenuOption == 1){
     display.setCursor(0, 12);
-    display.print(">");
+    display.print(F(">"));
   }
     if (MenuOption == 2){
     display.setCursor(0, 22);
-    display.print(">");
+    display.print(F(">"));
   }
     if (MenuOption == 3){
     display.setCursor(0, 32);
-    display.print(">");
+    display.print(F(">"));
   }
   
   display.display();
@@ -411,66 +411,66 @@ void SetTimeMenu(){
   display.clearDisplay();
   display.setTextSize(1);
   display.setCursor(40, 0);
-  display.print("Set Time");
+  display.print(F("Set Time"));
   display.setCursor(0, 0);
-  display.print("sel");
+  display.print(F("sel"));
   display.setCursor(115, 0);
-  display.print("up");
+  display.print(F("up"));
   display.setCursor(115, 57);
-  display.print("dn");
+  display.print(F("dn"));
 
   display.setCursor(5, 10);
-  display.print("Year  :");
+  display.print(F("Year  :"));
   display.setCursor(50, 10);
   display.print(year);
   display.setCursor(5, 18);
-  display.print("Month :");
+  display.print(F("Month :"));
   display.setCursor(50, 18);
   display.print(month);
   display.setCursor(5, 26);
-  display.print("Day   :");
+  display.print(F("Day   :"));
   display.setCursor(50, 26);
   display.print(day);
   display.setCursor(5, 34);
-  display.print("Hour  :");
+  display.print(F("Hour  :"));
   display.setCursor(50, 34);
   display.print(hour);
   display.setCursor(5, 42);
-  display.print("Minute:");
+  display.print(F("Minute:"));
   display.setCursor(50, 42);
   display.print(minute);
   display.setCursor(5, 50);
-  display.print("Save");
+  display.print(F("Save"));
   display.setCursor(80, 50);
-  display.print("Cancel");
+  display.print(F("Cancel"));
 
   if (MenuOption == 1){
     display.setCursor(0, 10);
-    display.print(">");
+    display.print(F(">"));
   }
     if (MenuOption == 2){
     display.setCursor(0, 18);
-    display.print(">");
+    display.print(F(">"));
   }
     if (MenuOption == 3){
     display.setCursor(0, 26);
-    display.print(">");
+    display.print(F(">"));
   }
     if (MenuOption == 4){
     display.setCursor(0, 34);
-    display.print(">");
+    display.print(F(">"));
   }
     if (MenuOption == 5){
     display.setCursor(0, 42);
-    display.print(">");
+    display.print(F(">"));
   }
     if (MenuOption == 6){
     display.setCursor(0, 50);
-    display.print(">");
+    display.print(F(">"));
   }
     if (MenuOption == 7){
     display.setCursor(75, 50);
-    display.print(">");
+    display.print(F(">"));
   }
   display.display();
 
