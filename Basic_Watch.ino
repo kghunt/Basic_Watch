@@ -599,7 +599,7 @@ void TonesMenu(){
 
   display.clearDisplay();
   display.setTextSize(1);
-  display.setCursor(40, 0);
+  display.setCursor(28, 0);
   display.print("Tone Settings");
   display.setCursor(0, 0);
   display.print("sel");
