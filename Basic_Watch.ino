@@ -92,7 +92,7 @@ int MinMenu;
 int WatchState = 0;
 
 // time to limit multiple presses.
-int debounce = 300;
+int debounce = 250;
 
 // Variables to store manual date and time values
 int year;
@@ -101,8 +101,9 @@ int day;
 int hour;
 int minute;
 int second;
+int lastday;
 
-// Button press tones 
+// Button press tones
 int KeyPressTone = 15;  // enabled
 const int KeyPressToneTime = 15;  // short chirp 10 ms
 // Hourly beeps
@@ -114,6 +115,10 @@ const int HourlyToneTime = 100;  // 100 ms
 #define BLUEFRUIT_SPI_IRQ              0
 #define BLUEFRUIT_SPI_RST              A1    // Optional but recommended, set to -1 if unused
 
+// Screen refresh delay
+int screendelay = 500;
+unsigned long lastlooptime;
+
 void setup() {
 
   // Set up the buttons as inputs
@@ -121,18 +126,18 @@ void setup() {
   pinMode(Button2, INPUT_PULLUP);
   pinMode(Button3, INPUT_PULLUP);
 
-  if (KeyPressTone > 0){
-  tone(buzzer,1000,KeyPressTone);
+  if (KeyPressTone > 0) {
+    tone(buzzer, 1000, KeyPressTone);
   }
   //Serial.begin(9600);
 
   // Battery saving stuffs. This should turn off the bluetooth module putting it to sleep.
-//  Adafruit_BluefruitLE_SPI ble(BLUEFRUIT_SPI_CS, BLUEFRUIT_SPI_IRQ, BLUEFRUIT_SPI_RST);
-//  ble.sendCommandCheckOK(F( "AT+HWMODELED=DISABLE" ));
-//  delay(100); ble.sendCommandCheckOK(F( "AT+UARTFLOW=OFF" ));
-//  delay(100); ble.sendCommandCheckOK(F( "AT+BLEPOWERLEVEL=-12" ));
-//  delay(100); ble.sendCommandCheckOK(F( "AT+BLEMIDIEN=OFF" ));
-//  delay(100); ble.sendCommandCheckOK(F( "AT+GAPSTOPADV" ));
+  //  Adafruit_BluefruitLE_SPI ble(BLUEFRUIT_SPI_CS, BLUEFRUIT_SPI_IRQ, BLUEFRUIT_SPI_RST);
+  //  ble.sendCommandCheckOK(F( "AT+HWMODELED=DISABLE" ));
+  //  delay(100); ble.sendCommandCheckOK(F( "AT+UARTFLOW=OFF" ));
+  //  delay(100); ble.sendCommandCheckOK(F( "AT+BLEPOWERLEVEL=-12" ));
+  //  delay(100); ble.sendCommandCheckOK(F( "AT+BLEMIDIEN=OFF" ));
+  //  delay(100); ble.sendCommandCheckOK(F( "AT+GAPSTOPADV" ));
 
   rtc.begin();
 
@@ -147,16 +152,16 @@ void setup() {
   rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
   //rtc.adjust(DateTime(2018,07,02,23,23,0));
 
-  SetDateTimeVar();
+  //SetDateTimeVar();
 
   // For voltage calulation
   vDivider = (R2 / (R1 + R2));
 
   //wake();
-  previousMillis = millis(); 
+  previousMillis = millis();
   Watchface();
   delay(3000);
-  sleep(); 
+  sleep();
 }
 
 void(* resetFunc) (void) = 0;//declare reset function at address 0
@@ -166,7 +171,7 @@ void loop() {
   DateTime now = rtc.now();
 
   if (HourlyTone > 0) {  // if hourly tones are enabled, check the time
-  // Double beep on the hour <-- todo make this occur once so we don't need the delay on the end
+    // Double beep on the hour <-- todo make this occur once so we don't need the delay on the end
     if (now.minute() == 00 && now.second() == 00) {
       tone(buzzer, 2000, HourlyTone);
       delay(300);
@@ -174,7 +179,7 @@ void loop() {
       delay(800);
       noTone(buzzer);
     }
-  // Single beep on the half hour <-- todo make this occur once so we don't need the delay on the end
+    // Single beep on the half hour <-- todo make this occur once so we don't need the delay on the end
     if (now.minute() == 30 && now.second() == 00) {
       tone(buzzer, 2000, HourlyTone);
       delay(800);  // wbp - was 1200???
@@ -183,19 +188,16 @@ void loop() {
   }
 
 
-  // Sleep display if timer runs out
-//  currentMillis = millis();
-  //Serial.println(currentMillis);
-  int int1 = interval;
+  unsigned long int1 = interval;
   if (Menu > 0) {
-    int1 = interval*10;
+    int1 = interval * 10;
   }
   if (millis() - previousMillis >= int1) {
     sleep();  // Turn display off because the timer ran out
   }
 
   // manage button presses.
-  if (digitalRead(Button1) == 0) {  // Button 0
+  if (digitalRead(Button1) == 0 && millis() - previousMillis >= debounce) {  // Button 0
     previousMillis = millis();
     if (KeyPressTone > 0) {
       tone(buzzer, NOTE_C7, KeyPressTone);
@@ -213,10 +215,10 @@ void loop() {
     else if (WatchState == 1 && Menu > 0) {
       ExecuteAction(MenuOption);
     }
-  delay(debounce);
+    //delay(debounce);
   }
-  
-  if (digitalRead(Button2) == 0) {  // UP 
+
+  if (digitalRead(Button2) == 0 && millis() - previousMillis >= debounce) {  // UP
     previousMillis = millis();
     if (KeyPressTone > 0) {
       tone(buzzer, NOTE_D7, KeyPressTone);
@@ -230,7 +232,7 @@ void loop() {
     else if (Menu > 0) {
       if (MenuOption > MinMenu) {
         MenuOption --;
-        }
+      }
       else {
         MenuOption = MaxMenu;  // Wrap
       }
@@ -245,10 +247,10 @@ void loop() {
         TonesMenu();
       }
     }
-  delay(debounce);
+    //delay(debounce);
   }  // button 2
 
-  if (digitalRead(Button3) == 0) {  // DOWN
+  if (digitalRead(Button3) == 0  && millis() - previousMillis >= debounce) {  // DOWN
     previousMillis = millis();
     if (KeyPressTone > 0) {
       tone(buzzer, NOTE_B6, KeyPressTone);
@@ -276,12 +278,17 @@ void loop() {
         TonesMenu();
       }
     }
-  delay(debounce);
+
   }  // button 3
 
   // put chip to sleep for 400 milliseconds
   if (WatchState == 0) {
-    Watchdog.sleep(400);
+    Watchdog.sleep(500);
+  }
+  if (WatchState == 1 && Menu == 0) {
+   
+    Watchface();
+ 
   }
 
 
@@ -291,13 +298,10 @@ void loop() {
 void wake() {
   display.ssd1306_command(SSD1306_DISPLAYON);
   WatchState = 1;
-  //Serial.println("Wake");
-//  previousMillis = millis();
 }
 
 // This fucntion puts the screen to sleep
 void sleep() {
-  //Serial.println("Sleep");
   display.ssd1306_command(SSD1306_DISPLAYOFF);
   WatchState = 0;
 }
@@ -305,8 +309,10 @@ void sleep() {
 // This function displays the main watchface
 // Todo seperate non watchface calcs into a seperate function eg. battery calcs
 void Watchface() {
-  //Serial.print("Watch face");
+  DateTime now = rtc.now();
   display.clearDisplay();
+
+
   // Battery measurements and calculations
   digitalWrite(battEn, HIGH);
   delay(50);
@@ -316,13 +322,12 @@ void Watchface() {
   delay(50);
   digitalWrite(battEn, LOW);
   percent = (voltage - 3.4) / 0.008;
-  if (percent < 0) {
-    percent = 0;
 
-  }
   if (percent > 100) {
     percent = 100;
   }
+
+ 
 
   // Screen stuff
   display.setTextSize(4);
@@ -330,8 +335,13 @@ void Watchface() {
 
   // Show Time
   display.setCursor(4, 15);
-  DateTime now = rtc.now();
-  sprintf(datebuffer, "%02u:%02u", now.hour(), now.minute());
+  
+
+  // Flash the colon for seconds
+  if (now.second() % 2) sprintf(datebuffer, "%02u:%02u", now.hour(), now.minute());
+  else sprintf(datebuffer, "%02u %02u", now.hour(), now.minute());
+
+  //sprintf(datebuffer, "%02u:%02u", now.hour(), now.minute());
   display.clearDisplay();
   display.setCursor(4, 15);
   display.print(datebuffer);
@@ -340,11 +350,19 @@ void Watchface() {
   display.setTextSize(1);
   display.setCursor(1, 54);
   display.print("Batt:");
-  display.print(percent);
+
+    if (percent < 0) {
+      display.print("!!");
+  }
+  else{
+      display.print(percent);
+
+  }
+
   display.print("%");
   display.display();
 
-  // Show date
+  // Show date 
   display.setCursor(40, 0);
   display.print(now.day(), DEC);
   display.print("-");
@@ -353,7 +371,7 @@ void Watchface() {
   display.print(now.year(), DEC);
   display.display();
 
-//  delay(debounce);
+
 }
 
 // This function displays the main menu
@@ -392,7 +410,7 @@ void MainMenu() {
   }
 
   display.display();
-  delay(debounce);
+  //delay(debounce);
 }
 
 // This function is the exit menu option
@@ -411,6 +429,7 @@ void ExecuteAction(int option) {
     }
     else if (option == 2) {
       MenuOption = 1;
+      SetDateTimeVar();
       SetTimeMenu();
     }
     else if (option == 3) {
@@ -470,8 +489,8 @@ void ExecuteAction(int option) {
 
   }
 
-// Menu 3 actions
-  else if (Menu == 3){
+  // Menu 3 actions
+  else if (Menu == 3) {
     if (option == 1) {
       MenuOption = 1;
       MainMenu();
@@ -488,14 +507,14 @@ void ExecuteAction(int option) {
     else if (option == 3) {
       if (HourlyTone == 0) {
         HourlyTone = HourlyToneTime;  // enable hourly tones
-        tone(buzzer,2000,100);
+        tone(buzzer, 2000, 100);
       }
       else {
         HourlyTone = 0;
       }
       TonesMenu();
     }
-    
+
   }
 
 }
@@ -592,7 +611,7 @@ void SetDateTimeVar() {
 }
 
 // Menu for setting the tones
-void TonesMenu(){
+void TonesMenu() {
   MaxMenu = 3;
   MinMenu = 1;
   Menu = 3;
@@ -607,28 +626,28 @@ void TonesMenu(){
   display.print("up");
   display.setCursor(115, 57);
   display.print("dn");
- 
+
   display.setCursor(5, 10);
   display.print("Exit");
-  
+
   display.setCursor(5, 18);
   display.print("Key Tones   :");
   display.setCursor(85, 18);
-  if (KeyPressTone > 0){
-      display.print("On");
+  if (KeyPressTone > 0) {
+    display.print("On");
   }
-  else{
+  else {
     display.print("Off");
   }
 
   display.setCursor(5, 26);
   display.print("Hourly Tones:");
   display.setCursor(85, 26);
-  
+
   if (HourlyTone > 0) {
     display.print("On");
   }
-  else{
+  else {
     display.print("Off");
   }
 
@@ -641,7 +660,7 @@ void TonesMenu(){
     display.setCursor(0, 18);
     display.print(">");
   }
-    else if (MenuOption == 3) {
+  else if (MenuOption == 3) {
     display.setCursor(0, 26);
     display.print(">");
   }
