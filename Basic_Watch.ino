@@ -360,7 +360,6 @@ void Watchface() {
   }
 
   display.print("%");
-  display.display();
 
   // Show date 
   display.setCursor(40, 0);
