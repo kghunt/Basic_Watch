@@ -10,3 +10,6 @@
 
 // Real time clock library
 #include <RTClib.h>
+
+// Adafruit sleepydog library
+#include <Adafruit_SleepyDog.h>
