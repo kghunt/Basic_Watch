@@ -32,14 +32,6 @@ void sleep() {
   WatchState = 0;
 }
 
-void menuoptionreset(){
-  if (PreviousMenu != Menu){
-  MenuOption = 0;
-}
-else{
-  PreviousMenu = Menu;
-}
-}
 void screeninit() {
   oled.begin(&Adafruit128x64, CS_PIN, DC_PIN, RST_PIN);
   oled.clear();
@@ -124,7 +116,6 @@ void watchface() {
 
   // This function accepts a list of strings and draws a text menu with them
 void MakeMenu(char* title, char* data[], int length, int option){
-  //menuoptionreset();
   oled.clear();
   oled.set1X();
   oled.setFont(System5x7);
@@ -165,7 +156,7 @@ void MakeMenu(char* title, char* data[], int length, int option){
 
     //debugging menu behaviour
     oled.setCursor(0,7);
-    oled.print(MenuOption);
+    oled.print(PreviousMenu);
     delay(100);
 }
 
@@ -188,7 +179,7 @@ void SetTimeMenu(){
   sprintf(m, "Minute:%02u", minute);
   char* items[] {y, M, d, h, m, "Save", "Cancel"};
   MaxMenu = 7;
-  MinMenu = 0;
+  MinMenu = 1;
   Menu = 2;
   MakeMenu("Set Time", items, MaxMenu, MenuOption);
  
@@ -211,7 +202,7 @@ void TonesMenu(){
   }
     char* items[] {"Exit", KT, HT};
   MaxMenu = 3;
-  MinMenu = 0;
+  MinMenu = 1;
   Menu = 3;
   MakeMenu("Tone Settings", items, MaxMenu, MenuOption);
 }
@@ -230,7 +221,7 @@ void AlarmMenu(){
   sprintf(AH, "Hour:%d", alarmhour);
   char* items[] {AE, AH, AM, "Exit"};
   Menu = 4;
-  MinMenu = 0;
+  MinMenu = 1;
   MaxMenu = 4;
   MakeMenu("Alarm", items, MaxMenu, MenuOption);
   
