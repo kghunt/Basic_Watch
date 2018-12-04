@@ -1,3 +1,7 @@
+// This will be set to 1 if usb is detected. You can manually set it also
+// If you do it will stop the AVR from going to sleep and clobbering the USB connection.
+int debug = 0;
+
 int WatchState = 1;
 
 // buzzer pin
@@ -55,3 +59,44 @@ int alarm = 0;
 int alarmstop = 0;
 int alarmhour = 00;
 int alarmmin = 00;
+
+// Bluetooth stuff
+#define BUFSIZE 128   // Size of the read buffer for incoming data
+#define VERBOSE_MODE true // If set to 'true' enables debug output
+#define BLUEFRUIT_SWUART_RXD_PIN       9    // Required for software serial!
+#define BLUEFRUIT_SWUART_TXD_PIN       10   // Required for software serial!
+#define BLUEFRUIT_UART_CTS_PIN         11   // Required for software serial!
+#define BLUEFRUIT_UART_RTS_PIN -1 // Optional, set to -1 if unused
+
+#ifdef Serial1    // this makes it not complain on compilation if there's no Serial1
+  #define BLUEFRUIT_HWSERIAL_NAME      Serial1
+#endif
+
+#define BLUEFRUIT_UART_MODE_PIN 12 // Set to -1 if unused
+#define BLUEFRUIT_SPI_CS               A2
+#define BLUEFRUIT_SPI_IRQ              0
+#define BLUEFRUIT_SPI_RST A1 // Optional but recommended, set to -1 if unused
+
+#define BLUEFRUIT_SPI_SCK              13
+#define BLUEFRUIT_SPI_MISO             12
+#define BLUEFRUIT_SPI_MOSI 11
+
+// USB Variables
+//USB Power Detdction
+bool usbConnected = false;
+bool charging = false;
+
+//ChargeLED(R) Vars
+long int chargeledmillis = 0;
+const int chargeledinterval = 50;
+const int chargeledmaxvalue = 255;
+const int chargeledminvalue = 10;
+int chargeledfadevalue = chargeledminvalue; // !!Important to initialize the startvalue with minvalue!!
+int chargeledfadesteps = 5;
+int currentmillis;
+#define CRG_STATE 5
+
+// LEDs
+#define LEDL        13
+#define LEDR 6
+

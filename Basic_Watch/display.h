@@ -76,8 +76,7 @@ void watchface() {
   
 
   // col(pixels),row(8 pixel rows)
-  oled.setCursor(0,7);
-  oled.print("Batt:");
+
 
 
     // Battery measurements and calculations
@@ -95,8 +94,6 @@ void watchface() {
     percent = 100;
   }
 
-  oled.print(percent);
-  oled.print("%");
   
   // lcdnums12x16 has a bug where when there is a space it drops the remaining characters trying a different font
   // all the fixednums and lcd nums and the disapearing minute issue.
@@ -112,6 +109,23 @@ void watchface() {
   // Display the time
   oled.print(datebuffer);
 
+    oled.set1X();
+    oled.setFont(System5x7);
+    oled.setCursor(0,7);
+  oled.print("Batt:");
+  oled.print(percent);
+  oled.print("%");
+
+  if (usbConnected){
+    oled.setCursor(80,7);
+    oled.print("USB");
+  }
+  
+  if (charging){
+
+    oled.setCursor(105,7);
+    oled.print("Chrg");
+  }
 }
 
   // This function accepts a list of strings and draws a text menu with them
@@ -154,9 +168,8 @@ void MakeMenu(char* title, char* data[], int length, int option){
     oled.setCursor(117,7);
     oled.print("dn");
 
-    //debugging menu behaviour
-    oled.setCursor(0,7);
-    oled.print(PreviousMenu);
+
+
     delay(100);
 }
 

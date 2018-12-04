@@ -57,3 +57,31 @@ if (alarm == 1 && alarmstop == 0){
 }
 
 }
+
+void usbstatecheck(){
+  if (currentmillis - chargeledmillis > chargeledinterval) {
+    chargeledmillis = currentmillis;
+    chargeledfadevalue = chargeledfadevalue + chargeledfadesteps;
+    if ((chargeledfadevalue <= chargeledminvalue) || (chargeledfadevalue >= chargeledmaxvalue)) chargeledfadesteps = -chargeledfadesteps;
+}
+
+  usbConnected = (USBSTA&(1<<VBUS));       
+
+  // Generate charging bit & show it
+  charging = usbConnected && !digitalRead(CRG_STATE);
+  
+  // Show charging as a glowing LEDR
+  if (charging) {
+    analogWrite(LEDR, chargeledfadevalue);  
+  }
+  else {
+    analogWrite(LEDR, 0);
+}
+if (usbConnected){
+  debug =1;
+}
+
+}
+  
+
+

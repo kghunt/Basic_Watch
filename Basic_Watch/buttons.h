@@ -204,6 +204,7 @@ void checkforpress(){
     if (WatchState == 0) {
       wake();
       if (Menu == 0) {
+        skipnext();
         watchface();
       }
     }
@@ -240,6 +241,7 @@ void checkforpress(){
     if (WatchState == 0) {
       wake();
       if (Menu == 0) {
+        skipprev();
         watchface();
       }
     }

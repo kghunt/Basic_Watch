@@ -1,6 +1,9 @@
 # Basic_Watch
 A basic Arduino firmware for the WatchX
 
+Some code for USB detection and breathing LED was taken from Tap Clock
+https://github.com/venice1200/TapClock
+
 The eventual aim is to have a basic firmware that has. 
 - Decent battery life.
 - A basic text based menu.
