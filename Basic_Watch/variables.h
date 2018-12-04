@@ -37,6 +37,7 @@ const int HourlyToneTime = 100;  // 100 ms
 int MinMenu;
 int MaxMenu;
 int MenuOption;
+int PreviousMenu = 0;
 
 // For the time menu
 char y[12];

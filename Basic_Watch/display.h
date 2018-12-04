@@ -32,6 +32,14 @@ void sleep() {
   WatchState = 0;
 }
 
+void menuoptionreset(){
+  if (PreviousMenu != Menu){
+  MenuOption = 0;
+}
+else{
+  PreviousMenu = Menu;
+}
+}
 void screeninit() {
   oled.begin(&Adafruit128x64, CS_PIN, DC_PIN, RST_PIN);
   oled.clear();
@@ -116,9 +124,16 @@ void watchface() {
 
   // This function accepts a list of strings and draws a text menu with them
 void MakeMenu(char* title, char* data[], int length, int option){
+  //menuoptionreset();
   oled.clear();
   oled.set1X();
   oled.setFont(System5x7);
+
+   oled.setCursor(0,0);
+   oled.print("sel");
+   oled.setCursor(117,0);
+   oled.print("up");
+    
   int titlespace = (21 - strlen(title)) / 2; // Calculate title spacing
 
    //   Pad title so it is centred
@@ -144,12 +159,14 @@ void MakeMenu(char* title, char* data[], int length, int option){
     
     
   }
-    oled.setCursor(0,0);
-    oled.print("sel");
+
     oled.setCursor(117,7);
     oled.print("dn");
-    oled.setCursor(117,0);
-    oled.print("up");
+
+    //debugging menu behaviour
+    oled.setCursor(0,7);
+    oled.print(MenuOption);
+    delay(100);
 }
 
 void MainMenu(){

@@ -211,7 +211,7 @@ void checkforpress(){
         MenuOption --;
       }
       else {
-        MenuOption = MaxMenu;  // Wrap
+        MenuOption = MaxMenu -1;  // Wrap
       }
       // not needed?
       if (Menu == 1) {
@@ -227,7 +227,7 @@ void checkforpress(){
         AlarmMenu();
       }
     }
-    //delay(debounce);
+   
   }  // button 2
 
   if (digitalRead(Button3) == 0  && millis() - previousMillis >= debounce) {  // DOWN
@@ -243,7 +243,7 @@ void checkforpress(){
       }
     }
     else if (Menu > 0) {
-      if (MenuOption < MaxMenu) {
+      if (MenuOption < MaxMenu -1 ) {
         MenuOption ++;
       }
       else {
