@@ -2,11 +2,14 @@
 Adafruit_BluefruitLE_SPI ble(BLUEFRUIT_SPI_CS, BLUEFRUIT_SPI_IRQ, BLUEFRUIT_SPI_RST);
 void bluetoothinit(){
   
- 
+  
   ble.begin(VERBOSE_MODE);
-  ble.factoryReset();
+  //ble.factoryReset();
   ble.sendCommandCheckOK(F( "AT+GAPDEVNAME=Basic_Watch" ));
   ble.sendCommandCheckOK(F( "AT+BleHIDEn=On" ));
+  ble.sendCommandCheckOK(F( "AT+BleKeyboardEn=On"  ));
+  ble.reset();
+  //ble.sendCommandCheckOK(F("AT+BLEHIDCONTROLKEY=MEDIANEXT"));
   }
 
 // Skip next song
@@ -24,3 +27,4 @@ void skipprev(){
 void bluloop(){
   
 }
+

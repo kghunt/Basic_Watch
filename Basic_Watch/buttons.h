@@ -201,10 +201,13 @@ void checkforpress(){
     if (KeyPressTone > 0) {
       tone(buzzer, NOTE_D7, KeyPressToneTime);
     }
+    if (WatchState == 1 && Menu == 0){
+             skipprev();
+    }
     if (WatchState == 0) {
       wake();
       if (Menu == 0) {
-        skipnext();
+ 
         watchface();
       }
     }
@@ -238,10 +241,13 @@ void checkforpress(){
     if (KeyPressTone > 0) {
       tone(buzzer, NOTE_B6, KeyPressToneTime);
     }
+    if (WatchState == 1 && Menu == 0){
+       skipnext();
+    }
     if (WatchState == 0) {
       wake();
       if (Menu == 0) {
-        skipprev();
+       
         watchface();
       }
     }

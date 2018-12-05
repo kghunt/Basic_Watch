@@ -78,7 +78,7 @@ void usbstatecheck(){
     analogWrite(LEDR, 0);
 }
 if (usbConnected){
-  debug =1;
+  //debug =1;
 }
 
 }
