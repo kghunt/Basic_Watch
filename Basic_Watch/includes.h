@@ -13,3 +13,7 @@
 
 // Adafruit sleepydog library
 #include <Adafruit_SleepyDog.h>
+
+// Bluetooth Libraries
+#include "Adafruit_BLE.h"
+#include "Adafruit_BluefruitLE_SPI.h"

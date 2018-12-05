@@ -13,6 +13,7 @@ void Exit() {
   cleardisplay();
   watchface();
   Menu = 0;
+  MenuOption = 0;
 }
 
 // Execute a selected menu option
@@ -24,12 +25,12 @@ void ExecuteAction(int option) {
       Exit();
     }
     else if (option == 1) {
-      option = 0;
+      MenuOption = 0;
       SetDateTimeVar();
       SetTimeMenu();
     }
     else if (option == 2) {
-      option = 0;
+      MenuOption = 0;
       TonesMenu();
     }
     // Menu 4 actions
@@ -44,7 +45,7 @@ void ExecuteAction(int option) {
     MainMenu();
   }
   else if (option == 4){
-    option = 0;
+    MenuOption = 0;
     AlarmMenu();
   }
   }
@@ -89,12 +90,12 @@ void ExecuteAction(int option) {
     }
     else if (option == 5) {
       SetTime();
-      option = 0;
+      MenuOption = 0;
       cleardisplay();
       MainMenu();
     }
     else if (option == 6) {
-      option = 0;
+      MenuOption = 0;
       SetDateTimeVar();
       cleardisplay();
       MainMenu();
@@ -105,7 +106,7 @@ void ExecuteAction(int option) {
   // Menu 3 actions
   else if (Menu == 3) {
     if (option == 0) {
-      option = 0;
+      MenuOption = 0;
       MainMenu();
     }
     else if (option == 1) {
@@ -203,15 +204,16 @@ void checkforpress(){
     if (WatchState == 0) {
       wake();
       if (Menu == 0) {
+        skipnext();
         watchface();
       }
     }
     else if (Menu > 0) {
-      if (MenuOption > MinMenu) {
+      if (MenuOption > MinMenu - 1) {
         MenuOption --;
       }
       else {
-        MenuOption = MaxMenu;  // Wrap
+        MenuOption = MaxMenu - 1;  // Wrap
       }
       // not needed?
       if (Menu == 1) {
@@ -227,7 +229,7 @@ void checkforpress(){
         AlarmMenu();
       }
     }
-    //delay(debounce);
+   
   }  // button 2
 
   if (digitalRead(Button3) == 0  && millis() - previousMillis >= debounce) {  // DOWN
@@ -239,11 +241,12 @@ void checkforpress(){
     if (WatchState == 0) {
       wake();
       if (Menu == 0) {
+        skipprev();
         watchface();
       }
     }
     else if (Menu > 0) {
-      if (MenuOption < MaxMenu) {
+      if (MenuOption < MaxMenu -1 ) {
         MenuOption ++;
       }
       else {
