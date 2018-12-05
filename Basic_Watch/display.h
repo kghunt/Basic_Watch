@@ -129,7 +129,7 @@ void watchface() {
 }
 
   // This function accepts a list of strings and draws a text menu with them
-void MakeMenu(char* title, char* data[], int length, int option){
+void MakeMenu(char* title, char data[], int length, int option){
   oled.clear();
   oled.set1X();
   oled.setFont(System5x7);
@@ -176,7 +176,7 @@ void MakeMenu(char* title, char* data[], int length, int option){
 void MainMenu(){
   char b[15];
   sprintf(b,"Brightness: %d", brightness);
-    char* items[] {"Exit", "Set Time", "Tones Menu", b, "Alarm"};
+    char items[] {"Exit", "Set Time", "Tones Menu", b, "Alarm"};
   Menu = 1;
   MaxMenu = 5;
   MinMenu = 1;
@@ -240,6 +240,3 @@ void AlarmMenu(){
   
 
 }
-
-
-
