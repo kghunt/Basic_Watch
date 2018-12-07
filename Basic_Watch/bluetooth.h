@@ -7,7 +7,8 @@ void bluetoothinit(){
   //ble.factoryReset();
   ble.sendCommandCheckOK(F( "AT+GAPDEVNAME=Basic_Watch" ));
   ble.sendCommandCheckOK(F( "AT+BleHIDEn=On" ));
-  ble.sendCommandCheckOK(F( "AT+BleKeyboardEn=On"  ));
+  //ble.sendCommandCheckOK(F( "AT+BleKeyboardEn=On"  )); 
+  ble.sendCommandCheckOK(F( "AT+BLEPOWERLEVEL=4" ));
   ble.reset();
   //ble.sendCommandCheckOK(F("AT+BLEHIDCONTROLKEY=MEDIANEXT"));
   }
@@ -23,8 +24,6 @@ void skipprev(){
 }
 
 
-// Bluetooth loop commands
-void bluloop(){
-  
-}
+ 
+
 

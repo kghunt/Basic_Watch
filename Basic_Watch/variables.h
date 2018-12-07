@@ -1,6 +1,6 @@
 // This will be set to 1 if usb is detected. You can manually set it also
 // If you do it will stop the AVR from going to sleep and clobbering the USB connection.
-int debug = 0;
+int debug = 1;
 
 int WatchState = 1;
 

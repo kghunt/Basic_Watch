@@ -241,5 +241,33 @@ void AlarmMenu(){
 
 }
 
+void bluflash(){
+  tone(buzzer, 2000, 50);
+  delay(800);  
+  noTone(buzzer);
+  ble.println("AT+BLEUARTTX=OK");
+  if (WatchState == 0){
+  wake();
+  }
+  oled.clear();
+  oled.println("Notification");
+  oled.println(ble.buffer);
+  delay(5000);
+  oled.clear();
+  
+}
+
+// Bluetooth loop commands
+void bluloop(){
+ ble.println("AT+BLEUARTRX");
+ ble.readline();
+  if (strcmp(ble.buffer, "OK") == 0) {
+    // no data
+    return;
+  }
+  // Some data was found, its in the buffer
+  bluflash();
+  ble.waitForOK();
+} 
 
 
