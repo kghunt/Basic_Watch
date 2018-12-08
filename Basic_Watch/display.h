@@ -119,13 +119,27 @@ void watchface() {
   if (usbConnected){
     oled.setCursor(80,7);
     oled.print("USB");
-  }
-  
-  if (charging){
+    
+    if (charging){
+      oled.setCursor(105,7);
+      oled.print("Chrg");
+    } else {
+        oled.setCursor(105,7);
+        oled.print("Full");
+      }
 
-    oled.setCursor(105,7);
-    oled.print("Chrg");
-  }
+    if(usbOneTimeEvent){
+      //Todo: Code here executed just for once when the usb is connected
+      usbOneTimeEvent = false;       
+    }
+   
+  } else{
+      if(!usbOneTimeEvent){
+        oled.setCursor(80,7);
+        oled.clearToEOL();  
+      }
+    } 
+    
 }
 
   // This function accepts a list of strings and draws a text menu with them

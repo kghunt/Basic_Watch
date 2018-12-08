@@ -85,6 +85,7 @@ int alarmmin = 00;
 //USB Power Detdction
 bool usbConnected = false;
 bool charging = false;
+bool usbOneTimeEvent = true;
 
 //ChargeLED(R) Vars
 long int chargeledmillis = 0;

@@ -68,7 +68,7 @@ void usbstatecheck(){
   usbConnected = (USBSTA&(1<<VBUS));       
 
   // Generate charging bit & show it
-  charging = usbConnected && !digitalRead(CRG_STATE);
+  charging = !digitalRead(CRG_STATE);
   
   // Show charging as a glowing LEDR
   if (charging) {
@@ -79,7 +79,7 @@ void usbstatecheck(){
 }
 if (usbConnected){
   //debug =1;
-}
+} 
 
 }
   
