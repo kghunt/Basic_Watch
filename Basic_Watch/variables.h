@@ -90,11 +90,11 @@ bool usbOneTimeEvent = true;
 //ChargeLED(R) Vars
 long int chargeledmillis = 0;
 const int chargeledinterval = 50;
-const int chargeledmaxvalue = 255;
+const int chargeledmaxvalue = 125;
 const int chargeledminvalue = 10;
 int chargeledfadevalue = chargeledminvalue; // !!Important to initialize the startvalue with minvalue!!
 int chargeledfadesteps = 5;
-int currentmillis;
+
 #define CRG_STATE 5
 
 // LEDs

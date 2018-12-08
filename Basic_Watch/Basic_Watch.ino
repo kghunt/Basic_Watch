@@ -40,7 +40,7 @@ void loop() {
   timedevents();
   checkforpress();
   bluloop();
-    if (WatchState == 0 && debug == 0) {
+    if (WatchState == 0 && debug == 0 && !usbConnected) {
     Watchdog.sleep(300);
     USBDevice.attach();
     

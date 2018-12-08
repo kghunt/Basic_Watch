@@ -59,6 +59,8 @@ if (alarm == 1 && alarmstop == 0){
 }
 
 void usbstatecheck(){
+  unsigned long currentmillis = millis();
+  
   if (currentmillis - chargeledmillis > chargeledinterval) {
     chargeledmillis = currentmillis;
     chargeledfadevalue = chargeledfadevalue + chargeledfadesteps;
